@@ -1,32 +1,40 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styles from "./ContactList.module.css";
 import { connect } from "react-redux";
 import listActions from "../../redux/listActions";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-const ContactList = function ({ list, deleteList }) {
-  return (
-    <TransitionGroup component="ul" className={styles.TaskList}>
-      {list.map((e) => {
-        return (
-          <CSSTransition key={e.id} timeout={250} classNames={styles}>
-            <li className={styles.contactListItem}>
-              {e.name} : {e.number}
-              <button
-                type="button"
-                onClick={() => deleteList(e.id)}
-                className={styles.contactListBtn}
-              >
-                Удалить
-              </button>
-            </li>
-          </CSSTransition>
-        );
-      })}
-    </TransitionGroup>
-  );
-};
+class ContactList extends Component {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.list !== this.props.list) {
+      localStorage.setItem("contacts", JSON.stringify(this.props.list));
+    }
+  }
+
+  render() {
+    return (
+      <TransitionGroup component="ul" className={styles.TaskList}>
+        {this.props.list.map((e) => {
+          return (
+            <CSSTransition key={e.id} timeout={250} classNames={styles}>
+              <li className={styles.contactListItem}>
+                {e.name} : {e.number}
+                <button
+                  type="button"
+                  onClick={() => this.props.deleteList(e.id)}
+                  className={styles.contactListBtn}
+                >
+                  Удалить
+                </button>
+              </li>
+            </CSSTransition>
+          );
+        })}
+      </TransitionGroup>
+    );
+  }
+}
 
 ContactList.propTypes = {
   deleteList: PropTypes.func.isRequired,

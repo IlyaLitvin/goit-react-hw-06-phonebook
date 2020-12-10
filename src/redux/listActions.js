@@ -1,9 +1,10 @@
 import action from "./actionTypes.js";
+import { v4 as uuidv4 } from "uuid";
 
-const addContact = (contact) => ({
+const addContact = ({ name, number }) => ({
   type: action.ADD,
   payload: {
-    contact,
+    contact: { id: uuidv4(), name, number },
   },
 });
 

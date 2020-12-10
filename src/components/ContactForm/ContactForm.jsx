@@ -1,26 +1,33 @@
 import React, { Component } from "react";
-import { v4 as uuidv4 } from "uuid";
 import styles from "./ContactForm.module.css";
 import { connect } from "react-redux";
 import newContact from "../../redux/listActions.js";
-
-const INITIAL_STATE = {
-  name: "",
-  number: "",
-  id: "",
-};
+import ErrNot from "../ErrorNotification/ErrorNotification";
 
 class ContactForm extends Component {
-  state = { ...INITIAL_STATE };
+  state = {
+    name: "",
+    number: "",
+    contactAdded: false,
+    declaredName: "",
+  };
 
   handleChange = ({ target }) => {
     this.setState({
-      id: uuidv4(),
       [target.name]: target.value,
     });
   };
+
   handleSubmit = (event) => {
     event.preventDefault();
+    const rule = this.props.list.some(
+      (contact) => contact.name === this.state.name
+    );
+    if (rule) {
+      this.setState({ contactAdded: true });
+      setTimeout(() => this.setState({ contactAdded: false }), 2000);
+      return;
+    }
     this.props.addContact({ ...this.state });
     this.setState({
       name: "",
@@ -29,9 +36,10 @@ class ContactForm extends Component {
   };
 
   render() {
-    const { name, number } = this.state;
+    const { name, number, declaredName, contactAdded } = this.state;
     return (
       <>
+        <ErrNot name={declaredName} contactAdded={contactAdded} />
         <form
           action="submit"
           onSubmit={this.handleSubmit}
@@ -68,8 +76,12 @@ class ContactForm extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  list: state.contacts.items,
+});
+
 const mapDispatchToProps = {
   addContact: newContact.addContact,
 };
 
-export default connect(null, mapDispatchToProps)(ContactForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

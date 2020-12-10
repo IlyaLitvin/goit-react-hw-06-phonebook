@@ -4,14 +4,8 @@ import ContactList from "./components/ContactList/ContactList";
 import Filter from "./components/Filter/Filter";
 import styles from "./App.module.css";
 import { CSSTransition } from "react-transition-group";
-import ErrNot from "./components/ErrorNotification/ErrorNotification.js";
 
 export default class App extends Component {
-  state = {
-    contactAdded: false,
-    declaredName: "",
-  };
-
   // componentDidMount() {
   //   const localList = localStorage.getItem("contacts");
   //   if (localList) {
@@ -64,7 +58,6 @@ export default class App extends Component {
   // };
 
   render() {
-    const { contactAdded, declaredName } = this.state;
     return (
       <>
         <CSSTransition
@@ -80,7 +73,6 @@ export default class App extends Component {
         <h2>Contacts</h2>
         <Filter />
         <ContactList />
-        <ErrNot name={declaredName} contactAdded={contactAdded} />
       </>
     );
   }
