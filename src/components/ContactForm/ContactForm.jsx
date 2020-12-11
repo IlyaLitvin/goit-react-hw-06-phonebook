@@ -9,7 +9,6 @@ class ContactForm extends Component {
     name: "",
     number: "",
     contactAdded: false,
-    declaredName: "",
   };
 
   handleChange = ({ target }) => {
@@ -36,10 +35,10 @@ class ContactForm extends Component {
   };
 
   render() {
-    const { name, number, declaredName, contactAdded } = this.state;
+    const { name, number, contactAdded } = this.state;
     return (
       <>
-        <ErrNot name={declaredName} contactAdded={contactAdded} />
+        <ErrNot contactAdded={contactAdded} />
         <form
           action="submit"
           onSubmit={this.handleSubmit}
